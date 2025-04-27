@@ -10,5 +10,8 @@ namespace FryFrokBackend.DataBase
 
         }
         public DbSet<RegisterUser> Register { get; set; }
+        public DbSet<ProductsDetail> Product { get; set; }
+        public DbSet<AddCart> Orders {  get; set; }
+
     }
 }
