@@ -50,5 +50,26 @@ namespace FryFrokBackend.Controllers
             }
             return Ok("User Login Successfully");
         }
+
+        [HttpGet ("GetUser")]
+        public async Task<IActionResult> GetUser()
+        {
+            var user = await _dbContext.Register.ToListAsync();
+            if(user==null)
+            {
+                return BadRequest("User Not Found");
+            }
+            return Ok(user);
+        }
+        [HttpGet("GetUser/{Email}")]
+        public async Task<IActionResult> GetUserById(string Email)
+        {
+            var user = await _dbContext.Register.Where(u => u.Email == Email).ToListAsync();
+            if (user == null)
+            {
+                return BadRequest("User Not Found");
+            }
+            return Ok(user);
+        }
     }
 }

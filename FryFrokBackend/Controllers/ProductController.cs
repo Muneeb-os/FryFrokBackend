@@ -2,6 +2,7 @@
 using FryFrokBackend.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace FryFrokBackend.Controllers
 {
@@ -58,5 +59,27 @@ namespace FryFrokBackend.Controllers
             await _dbContext.SaveChangesAsync();
             return Ok("Item Added Successfully");
         }
+        [HttpPut("UpdateStatus/{id}")]
+        public async Task<IActionResult> UpdateStatus(int id, [FromBody] UpdateStatusDto statusDto)
+        {
+            var user = await _dbContext.Orders.FindAsync(id);
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            user.status = statusDto.Status; 
+            _dbContext.Orders.Update(user);
+            await _dbContext.SaveChangesAsync();
+
+            return Ok("Status updated successfully.");
+        }
+        [HttpGet("Orders")]
+        public async Task<IActionResult> GetAllOrders()
+        {
+            var order = await _dbContext.Orders.ToListAsync();
+            return Ok(order);
+        }
+
     }
 }
