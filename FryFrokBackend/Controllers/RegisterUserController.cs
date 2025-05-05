@@ -32,7 +32,7 @@ namespace FryFrokBackend.Controllers
             {
                 Name = registerUser.Name,
                 Email = registerUser.Email,
-                Password = registerUser.Password,
+                Password = registerUser.Password
             };
             _dbContext.Add(newUser);
             await _dbContext.SaveChangesAsync();
@@ -41,15 +41,27 @@ namespace FryFrokBackend.Controllers
         }
 
         [HttpPost("LoginUser")]
-        public async Task<IActionResult> Login([FromBody]LoginDto logindto )
+        public async Task<IActionResult> Login([FromBody] LoginDto logindto)
         {
-            var user = await _dbContext.Register.FirstOrDefaultAsync(u => u.Email == logindto.Email && u.Password == logindto.Password);
-            if(user==null)
+            var user = await _dbContext.Register
+                .FirstOrDefaultAsync(u => u.Email == logindto.Email && u.Password == logindto.Password);
+
+            if (user == null)
             {
-                return Unauthorized("Invalid Cradentional");
+                return Unauthorized("Invalid credentials");
             }
-            return Ok("User Login Successfully");
+
+            
+            return Ok(new
+            {
+                Message = "User login successful",
+                //UserId = user.Id,
+                //Email = user.Email,
+                //Name = user.Name,
+                Role = user.Role
+            });
         }
+
 
         [HttpGet ("GetUser")]
         public async Task<IActionResult> GetUser()
