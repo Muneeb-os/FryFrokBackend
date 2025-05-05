@@ -71,5 +71,15 @@ namespace FryFrokBackend.Controllers
             }
             return Ok(user);
         }
+        [HttpGet("CompleteOrder")]
+        public async Task<IActionResult> CompleteOrder()
+        {
+            var orderstatus = await _dbContext.Orders.Where(o => o.status == "Delivered").ToListAsync();
+            if (orderstatus == null)
+            {
+                return BadRequest("Not Found Complete Order");
+            }
+            return Ok(orderstatus);
+        }
     }
 }
